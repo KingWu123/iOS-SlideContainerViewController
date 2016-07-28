@@ -58,6 +58,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
         [self.view addGestureRecognizer:panGesture];
+        
+         self.leftVCSnapShotImageView = [[UIImageView alloc]init];
+         self.rightVCSnapShotImageView = [[UIImageView alloc]init];
     }
     return self;
 }
@@ -278,14 +281,12 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 - (void)handleLeftVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer{
     
     //用一张截图做动画
-    if (self.leftVCSnapShotImageView == nil){
-        UIImage *leftVCSnapShotImage = [self snapShotController:self.leftViewController];
-        self.leftVCSnapShotImageView = [[UIImageView alloc]init];
-        self.leftVCSnapShotImageView.image = leftVCSnapShotImage;
-    }
 
     if (recognizer.state == UIGestureRecognizerStateBegan){
 
+        UIImage *leftVCSnapShotImage = [self snapShotController:self.leftViewController];
+        self.leftVCSnapShotImageView.image = leftVCSnapShotImage;
+        
         if ([self.view viewWithTag:1002] == nil){
             [self.view addSubview:self.leftVCSnapShotImageView];
             self.leftVCSnapShotImageView.tag = 1002;
@@ -375,15 +376,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 //手势更随，当前显示的是LeftVC, rightVC 将要显示出来
 - (void)handleRightVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer {
     
-    //用一张截图做动画
-    if (self.rightVCSnapShotImageView == nil){
-        UIImage *rightVCSnapShotImage = [self snapShotController:self.rightViewController];
-        self.rightVCSnapShotImageView = [[UIImageView alloc]init];
-        self.rightVCSnapShotImageView.image = rightVCSnapShotImage;
-    }
+   
+   
     
     
     if (recognizer.state == UIGestureRecognizerStateBegan){
+         //用一张截图做动画
+        UIImage *rightVCSnapShotImage = [self snapShotController:self.rightViewController];
+        self.rightVCSnapShotImageView.image = rightVCSnapShotImage;
         
         if ([self.view viewWithTag:1003] == nil){
             [self.view insertSubview:self.rightVCSnapShotImageView atIndex:0];
