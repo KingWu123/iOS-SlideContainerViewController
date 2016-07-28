@@ -135,13 +135,35 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
     // Get the start frame of the new view controller and the end frame
     // for the old view controller. Both rectangles are offscreen.
-   
     newVC.view.frame = toVCBeginFrame;
-    
-    
     CGRect endFrame = [self oldViewEndFrame:direction];
     
+    [oldVC beginAppearanceTransition: NO animated: YES];
+    [newVC beginAppearanceTransition: YES animated: YES];
+    [self.view addSubview:newVC.view];
     
+    [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME delay:0.0 options:(7 << 16) animations:^{
+        newVC.view.frame = self.view.bounds;
+        oldVC.view.frame = endFrame;
+        
+        if (direction == FROM_RIGHT_TO_LEFT){
+            [self.view bringSubviewToFront:oldVC.view];
+        }
+
+        
+    } completion:^(BOOL finished) {
+        
+        [oldVC.view removeFromSuperview];
+        
+        [oldVC endAppearanceTransition];
+        [newVC endAppearanceTransition];
+        
+        [oldVC removeFromParentViewController];
+        [newVC didMoveToParentViewController:self];
+    }];
+    
+    
+    /*下面的newVC的viewDidAppear 和  oldVC viewDidDisappear 调用时序反了
     // Queue up the transition animation.
     [self transitionFromViewController: oldVC
                       toViewController: newVC
@@ -163,7 +185,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                                 [newVC didMoveToParentViewController:self];
                                 
                             }];
+     */
 }
+
 
 
 /**
@@ -199,6 +223,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         return CGRectMake(self.view.frame.size.width/3, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
     }
 }
+
 
 //老的child vc.view 结束时的初始化位置
 - (CGRect)oldViewEndFrame:(SHOW_SUBVC_DIRECTION)direction{
