@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		755673EE1D49A3760074837E /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755673ED1D49A3760074837E /* UserCenterViewController.m */; };
+		755673F01D49A38C0074837E /* UserCenterViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */; };
+		755673F31D49B3930074837E /* SlideContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755673F21D49B3930074837E /* SlideContainerViewController.m */; };
+		755674431D49DE600074837E /* UIViewController+SlideContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755674421D49DE600074837E /* UIViewController+SlideContainerViewController.m */; };
 		755C89E71D48DE93004487EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89E61D48DE93004487EA /* main.m */; };
 		755C89EA1D48DE93004487EA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89E91D48DE93004487EA /* AppDelegate.m */; };
 		755C89ED1D48DE93004487EA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89EC1D48DE93004487EA /* ViewController.m */; };
@@ -35,6 +39,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		755673EC1D49A3760074837E /* UserCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterViewController.h; sourceTree = "<group>"; };
+		755673ED1D49A3760074837E /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
+		755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserCenterViewController.storyboard; sourceTree = "<group>"; };
+		755673F11D49B3930074837E /* SlideContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideContainerViewController.h; sourceTree = "<group>"; };
+		755673F21D49B3930074837E /* SlideContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideContainerViewController.m; sourceTree = "<group>"; };
+		755674411D49DE600074837E /* UIViewController+SlideContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SlideContainerViewController.h"; sourceTree = "<group>"; };
+		755674421D49DE600074837E /* UIViewController+SlideContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SlideContainerViewController.m"; sourceTree = "<group>"; };
 		755C89E21D48DE93004487EA /* ContainerViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContainerViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		755C89E61D48DE93004487EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		755C89E81D48DE93004487EA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -106,6 +117,13 @@
 				755C89EB1D48DE93004487EA /* ViewController.h */,
 				755C89EC1D48DE93004487EA /* ViewController.m */,
 				755C89EE1D48DE93004487EA /* Main.storyboard */,
+				755673EC1D49A3760074837E /* UserCenterViewController.h */,
+				755673ED1D49A3760074837E /* UserCenterViewController.m */,
+				755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */,
+				755673F11D49B3930074837E /* SlideContainerViewController.h */,
+				755673F21D49B3930074837E /* SlideContainerViewController.m */,
+				755674411D49DE600074837E /* UIViewController+SlideContainerViewController.h */,
+				755674421D49DE600074837E /* UIViewController+SlideContainerViewController.m */,
 				755C89F11D48DE93004487EA /* Assets.xcassets */,
 				755C89F31D48DE93004487EA /* LaunchScreen.storyboard */,
 				755C89F61D48DE93004487EA /* Info.plist */,
@@ -247,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				755C89F51D48DE93004487EA /* LaunchScreen.storyboard in Resources */,
+				755673F01D49A38C0074837E /* UserCenterViewController.storyboard in Resources */,
 				755C89F21D48DE93004487EA /* Assets.xcassets in Resources */,
 				755C89F01D48DE93004487EA /* Main.storyboard in Resources */,
 			);
@@ -275,7 +294,10 @@
 			files = (
 				755C89ED1D48DE93004487EA /* ViewController.m in Sources */,
 				755C89EA1D48DE93004487EA /* AppDelegate.m in Sources */,
+				755673EE1D49A3760074837E /* UserCenterViewController.m in Sources */,
+				755674431D49DE600074837E /* UIViewController+SlideContainerViewController.m in Sources */,
 				755C89E71D48DE93004487EA /* main.m in Sources */,
+				755673F31D49B3930074837E /* SlideContainerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +523,7 @@
 				755C8A111D48DE93004487EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		755C8A121D48DE93004487EA /* Build configuration list for PBXNativeTarget "ContainerViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +532,7 @@
 				755C8A141D48DE93004487EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		755C8A151D48DE93004487EA /* Build configuration list for PBXNativeTarget "ContainerViewControllerUITests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +541,7 @@
 				755C8A171D48DE93004487EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

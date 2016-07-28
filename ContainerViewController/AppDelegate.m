@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SlideContainerViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    UIViewController *rightVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"TabBarViewController"];
+    
+    UIViewController *leftVC =  [[UIStoryboard storyboardWithName:@"UserCenterViewController" bundle:nil] instantiateViewControllerWithIdentifier:@"UserCenterViewController"];
+    
+    SlideContainerViewController *rootVC = [[SlideContainerViewController alloc]initWithRightViewController:rightVC withLeftViewController:leftVC];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.hidden = NO;
+    [self.window setRootViewController:rootVC];
+    [self.window makeKeyWindow];
+    
     return YES;
 }
 
