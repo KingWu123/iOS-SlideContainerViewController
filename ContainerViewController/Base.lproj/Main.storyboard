@@ -17,6 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kMP-FZ-ZIf">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                            </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="我是主界面" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sf4-o4-lsH">
                                 <rect key="frame" x="13" y="192" width="85" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -25,6 +29,12 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kMP-FZ-ZIf" secondAttribute="bottom" id="GZ8-ti-lhC"/>
+                            <constraint firstAttribute="trailing" secondItem="kMP-FZ-ZIf" secondAttribute="trailing" id="NeP-6o-5Fr"/>
+                            <constraint firstItem="kMP-FZ-ZIf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="eA7-FN-NcD"/>
+                            <constraint firstAttribute="leading" secondItem="kMP-FZ-ZIf" secondAttribute="leading" id="jJX-xs-u1d"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="A67-S6-5xb">
                         <barButtonItem key="leftBarButtonItem" title="UserCenter" id="DJE-5g-ipZ">

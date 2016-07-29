@@ -8,6 +8,24 @@
 
 #import "SlideContainerViewController.h"
 
+@interface TransitionView : UIView
+
+@end
+
+@implementation TransitionView
+
+@end
+
+
+@interface WrapperView : UIView
+
+@end
+
+@implementation WrapperView
+
+@end
+
+
 /**
  *  实现类似于QQ的  个人账号界面 和 主界面 打开效果的ContianViewController
  */
@@ -39,6 +57,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 @property (nonatomic, assign)CGPoint panGesturePreOffset;
 @property (nonatomic, assign)PanGestureMoveType panGestureLastMoveType;
 
+@property (nonatomic, weak)TransitionView *transitionView;
+@property (nonatomic, weak)WrapperView *wrapperView;
+
 @end
 
 @implementation SlideContainerViewController
@@ -49,6 +70,21 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
  
     self = [super init];
     if (self){
+        
+        //init transitionView
+        TransitionView *transitionView = [[TransitionView alloc]initWithFrame:self.view.bounds];
+        transitionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [transitionView setBackgroundColor:[UIColor clearColor]];
+        [self.view addSubview:transitionView];
+        self.transitionView =transitionView;
+        
+        //init wrapper
+        WrapperView *wrapperView = [[WrapperView alloc]initWithFrame:self.view.bounds];
+        wrapperView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [wrapperView setBackgroundColor:[UIColor clearColor]];
+        [self.transitionView addSubview:wrapperView];
+        self.wrapperView =wrapperView;
+        
         self.rightViewController = rightViewController;
         self.leftViewController = leftViewController;
         
@@ -57,7 +93,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
-        [self.view addGestureRecognizer:panGesture];
+        [self.transitionView addGestureRecognizer:panGesture];
         
          self.leftVCSnapShotImageView = [[UIImageView alloc]init];
          self.rightVCSnapShotImageView = [[UIImageView alloc]init];
@@ -68,7 +104,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor redColor]];
     // Do any additional setup after loading the view.
 }
 
@@ -143,14 +179,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
     [oldVC beginAppearanceTransition: NO animated: YES];
     [newVC beginAppearanceTransition: YES animated: YES];
-    [self.view addSubview:newVC.view];
+    [self.wrapperView addSubview:newVC.view];
     
     [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME delay:0.0 options:(7 << 16) animations:^{
-        newVC.view.frame = self.view.bounds;
+        newVC.view.frame = self.wrapperView.bounds;
         oldVC.view.frame = endFrame;
         
         if (direction == FROM_RIGHT_TO_LEFT){
-            [self.view bringSubviewToFront:oldVC.view];
+            [self.wrapperView bringSubviewToFront:oldVC.view];
         }
 
         
@@ -174,11 +210,11 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                                options: (7 << 16)
                             animations:^{
                                 // Animate the views to their final positions.
-                                newVC.view.frame = self.view.bounds;
+                                newVC.view.frame = self.wrapperView.bounds;
                                 oldVC.view.frame = endFrame;
                                 
                                 if (direction == FROM_RIGHT_TO_LEFT){
-                                    [self.view bringSubviewToFront:oldVC.view];
+                                    [self.wrapperView bringSubviewToFront:oldVC.view];
                                 }
                             }
                             completion:^(BOOL finished) {
@@ -206,8 +242,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     [self addChildViewController:newVC];
     
     [oldVC.view removeFromSuperview];
-    newVC.view.frame = self.view.bounds;
-    [self.view addSubview:newVC.view];
+    newVC.view.frame = self.wrapperView.bounds;
+    [self.wrapperView addSubview:newVC.view];
     
     
     [oldVC removeFromParentViewController];
@@ -221,9 +257,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 //新的child vc.view 出现时的初始化位置
 - (CGRect)newViewStartFrame:(SHOW_SUBVC_DIRECTION)direction{
     if (direction == FROM_LEFT_TO_RIGHT){
-        return CGRectMake(-self.view.frame.size.width, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+        return CGRectMake(-self.wrapperView.frame.size.width, self.wrapperView.frame.origin.y, self.wrapperView.frame.size.width, self.wrapperView.frame.size.height);
     }else{
-        return CGRectMake(self.view.frame.size.width/3, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+        return CGRectMake(self.wrapperView.frame.size.width/3, self.wrapperView.frame.origin.y, self.wrapperView.frame.size.width, self.wrapperView.frame.size.height);
     }
 }
 
@@ -231,9 +267,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 //老的child vc.view 结束时的初始化位置
 - (CGRect)oldViewEndFrame:(SHOW_SUBVC_DIRECTION)direction{
     if (direction == FROM_LEFT_TO_RIGHT){
-        return CGRectMake(self.view.frame.size.width/3, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+        return CGRectMake(self.wrapperView.frame.size.width/3, self.wrapperView.frame.origin.y, self.wrapperView.frame.size.width, self.wrapperView.frame.size.height);
     }else{
-        return CGRectMake(-self.view.frame.size.width, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+        return CGRectMake(-self.wrapperView.frame.size.width, self.wrapperView.frame.origin.y, self.wrapperView.frame.size.width, self.wrapperView.frame.size.height);
     }
 }
 
@@ -243,8 +279,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 - (void)displayContentController:(UIViewController *)contentViewController{
     
     [self addChildViewController:contentViewController];
-    contentViewController.view.frame = self.view.bounds;
-    [self.view addSubview:contentViewController.view];
+    contentViewController.view.frame = self.wrapperView.bounds;
+    [self.wrapperView addSubview:contentViewController.view];
     [contentViewController didMoveToParentViewController:self];
     
     
@@ -269,9 +305,22 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 #pragma mark - PanGesture
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)recognizer{
  
-    if(self.visibleViewController == _rightViewController){
+    static BOOL isRecognizerSuccess = NO;
+    if (recognizer.state == UIGestureRecognizerStateBegan){
+        
+        CGPoint beginPositon = [recognizer locationInView:self.wrapperView];
+        
+        if (beginPositon.x < 50){
+            isRecognizerSuccess = YES;
+        }else{
+            isRecognizerSuccess = NO;
+        }
+    }
+
+    //只有从屏幕的最左边拉出，界面才需要leftVC
+    if(self.visibleViewController == _rightViewController && isRecognizerSuccess){
         [self handleLeftVCShowPanGestureRecognizer:recognizer];
-    }else{
+    }else if (self.visibleViewController == _leftViewController){
         [self handleRightVCShowPanGestureRecognizer:recognizer];
     }
 }
@@ -287,14 +336,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         UIImage *leftVCSnapShotImage = [self snapShotController:self.leftViewController];
         self.leftVCSnapShotImageView.image = leftVCSnapShotImage;
         
-        if ([self.view viewWithTag:1002] == nil){
-            [self.view addSubview:self.leftVCSnapShotImageView];
-            self.leftVCSnapShotImageView.tag = 1002;
+        
+        if (![self.leftVCSnapShotImageView isDescendantOfView:self.wrapperView]){
+            [self.wrapperView addSubview:self.leftVCSnapShotImageView];
         }
         self.leftVCSnapShotImageView.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
         
         
-        CGPoint offset = [recognizer translationInView:self.view];
+        CGPoint offset = [recognizer translationInView:self.wrapperView];
         self.panGesturePreOffset = offset;
         if (offset.x < 0)
         {
@@ -308,7 +357,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
     }else if (recognizer.state == UIGestureRecognizerStateChanged){
         
-        CGPoint offset = [recognizer translationInView:self.view];
+        CGPoint offset = [recognizer translationInView:self.wrapperView];
         
         //每次move的offset的改变，都更新一下 移动的方向
         if (offset.x < self.panGesturePreOffset.x) {
@@ -344,7 +393,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled){
         
         //如果的距离超过1/3，或者向右滑动的话， 则显示出界面，
-        if (fabs(self.leftVCSnapShotImageView.frame.origin.x + self.leftVCSnapShotImageView.frame.size.width) >= self.view.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
+        if (fabs(self.leftVCSnapShotImageView.frame.origin.x + self.leftVCSnapShotImageView.frame.size.width) >= self.wrapperView.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
         {
             [self.leftVCSnapShotImageView removeFromSuperview];
             
@@ -360,7 +409,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                                 options: (7 << 16)
                              animations:^{
                                  self.leftVCSnapShotImageView.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
-                                 self.rightViewController.view.frame = self.view.bounds;
+                                 self.rightViewController.view.frame = self.wrapperView.bounds;
                              }
                              completion:^(BOOL finished) {
                                  [self.leftVCSnapShotImageView removeFromSuperview];
@@ -375,24 +424,20 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 
 //手势更随，当前显示的是LeftVC, rightVC 将要显示出来
 - (void)handleRightVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer {
-    
-   
-   
-    
+
     
     if (recognizer.state == UIGestureRecognizerStateBegan){
          //用一张截图做动画
         UIImage *rightVCSnapShotImage = [self snapShotController:self.rightViewController];
         self.rightVCSnapShotImageView.image = rightVCSnapShotImage;
         
-        if ([self.view viewWithTag:1003] == nil){
-            [self.view insertSubview:self.rightVCSnapShotImageView atIndex:0];
-            self.rightVCSnapShotImageView.tag = 1003;
+        if (![self.rightVCSnapShotImageView isDescendantOfView:self.wrapperView]){
+            [self.wrapperView insertSubview:self.rightVCSnapShotImageView atIndex:0];
         }
         self.rightVCSnapShotImageView.frame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
         
         
-        CGPoint offset = [recognizer translationInView:self.view];
+        CGPoint offset = [recognizer translationInView:self.wrapperView];
         self.panGesturePreOffset = offset;
         if (offset.x < 0)
         {
@@ -405,7 +450,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
     }else if (recognizer.state == UIGestureRecognizerStateChanged){
         
-        CGPoint offset = [recognizer translationInView:self.view];
+        CGPoint offset = [recognizer translationInView:self.wrapperView];
         
         //每次move的offset的改变，都更新一下 移动的方向
         if (offset.x < self.panGesturePreOffset.x) {
@@ -456,7 +501,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                                 options: (7 << 16)
                              animations:^{
                                  self.rightVCSnapShotImageView.frame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
-                                 self.leftViewController.view.frame = self.view.bounds;
+                                 self.leftViewController.view.frame = self.wrapperView.bounds;
                                  
                              }
                              completion:^(BOOL finished) {
