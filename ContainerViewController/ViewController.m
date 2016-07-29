@@ -10,6 +10,7 @@
 #import "UIViewController+SlideContainerViewController.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UIScrollView *scorllView;
 
 @end
 
@@ -17,6 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.scorllView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
     // Do any additional setup after loading the view, typically from a nib.
 }
 

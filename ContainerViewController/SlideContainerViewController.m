@@ -31,7 +31,7 @@
  */
 
 #define CONTAIN_VIEW_AIMATION_TIME  0.3
-@interface SlideContainerViewController ()
+@interface SlideContainerViewController ()<UIGestureRecognizerDelegate>
 
 
 typedef NS_ENUM(NSInteger, SHOW_SUBVC_DIRECTION) {
@@ -54,11 +54,15 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 @property (nonatomic, strong)UIImageView *rightVCSnapShotImageView;
 @property (nonatomic, strong)UIImageView *leftVCSnapShotImageView;
 
+@property (nonatomic, strong)UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign)CGPoint panGesturePreOffset;
 @property (nonatomic, assign)PanGestureMoveType panGestureLastMoveType;
 
 @property (nonatomic, weak)TransitionView *transitionView;
 @property (nonatomic, weak)WrapperView *wrapperView;
+
+
+@property (nonatomic, strong)NSMutableSet *conflictGestures;
 
 @end
 
@@ -98,11 +102,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         self.visibleViewController = rightViewController;
         
         
-        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
-        [self.transitionView addGestureRecognizer:panGesture];
+        self.panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
+        self.panGesture.delegate = self;
+        [self.transitionView addGestureRecognizer:self.panGesture];
         
          self.leftVCSnapShotImageView = [[UIImageView alloc]init];
          self.rightVCSnapShotImageView = [[UIImageView alloc]init];
+        
+        self.conflictGestures = [[NSMutableSet alloc]init];
     }
     return self;
 }
@@ -299,11 +306,6 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     [contentViewController.view removeFromSuperview];
     [contentViewController removeFromParentViewController];
     
-    //触发viewWillDisappear
-    //[contentViewController beginAppearanceTransition: NO animated: NO];
-    //触发viewDidDisappear
-    //[contentViewController endAppearanceTransition];
-    
 }
 
 
@@ -314,21 +316,27 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     static BOOL isRecognizerSuccess = NO;
     if (recognizer.state == UIGestureRecognizerStateBegan){
         
-        CGPoint beginPositon = [recognizer locationInView:self.wrapperView];
+        CGPoint beginPositon = [recognizer locationInView:self.transitionView];
         
-        if (beginPositon.x < 50){
+        
+        if ((beginPositon.x < 50 && self.visibleViewController == _rightViewController)
+            || (beginPositon.x > [[UIScreen mainScreen] bounds].size.width - 60 && self.visibleViewController == _leftViewController)){
             isRecognizerSuccess = YES;
         }else{
             isRecognizerSuccess = NO;
         }
     }
-
-    //只有从屏幕的最左边拉出，界面才需要leftVC
+    
+    
+    //想拉出左界面，只有从屏幕的最左边拉出，界面才需要显示
     if(self.visibleViewController == _rightViewController && isRecognizerSuccess){
         [self handleLeftVCShowPanGestureRecognizer:recognizer];
-    }else if (self.visibleViewController == _leftViewController){
+    }
+    //想拉叔右界面，只有从屏幕最右边拉出，界面才需要显示
+    else if (self.visibleViewController == _leftViewController && isRecognizerSuccess){
         [self handleRightVCShowPanGestureRecognizer:recognizer];
     }
+
 }
 
 
@@ -391,6 +399,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             //rightVC
             CGRect rightVCFrame = self.rightViewController.view.frame;
             self.rightViewController.view.frame = CGRectMake(offset.x/3, rightVCFrame.origin.y, rightVCFrame.size.width, rightVCFrame.size.height);
+            
+            //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
+            [self removeConflictGesturesTouchEvent];
             
         }else{
             return;
@@ -485,6 +496,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             CGRect leftVCFrame = self.leftViewController.view.frame;
             self.leftViewController.view.frame = CGRectMake(offset.x, leftVCFrame.origin.y, leftVCFrame.size.width, leftVCFrame.size.height);
 
+            //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
+            [self removeConflictGesturesTouchEvent];
+            
         }else{
             return;
         }
@@ -543,6 +557,36 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     UIGraphicsEndImageContext();
     
     return returnImage;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    
+    if (gestureRecognizer == self.panGesture){
+        // 如果otherGestureRecognizer是scrollview 判断scrollview的contentOffset.x 是否小于等于0，YES
+        if ([[otherGestureRecognizer view] isKindOfClass:[UIScrollView class]]) {
+            
+            UIScrollView *scrollView = (UIScrollView *)[otherGestureRecognizer view];
+            if (scrollView.contentOffset.x <= 0) {
+                
+                [self.conflictGestures addObject:otherGestureRecognizer];
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+//当手势跟随成功时， 删除其它同时存在的手势的事件，使只有手势跟随的手势存在
+- (void)removeConflictGesturesTouchEvent{
+    
+    for (UIGestureRecognizer *recognizer in self.conflictGestures) {
+        BOOL originEnabled = recognizer.enabled;
+        recognizer.enabled = NO;
+        recognizer.enabled = originEnabled;
+    }
+    
+    [self.conflictGestures removeAllObjects];
 }
 
 
