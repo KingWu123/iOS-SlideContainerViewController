@@ -88,6 +88,12 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         self.rightViewController = rightViewController;
         self.leftViewController = leftViewController;
         
+        
+        
+        //这里主要是让 leftView的view自适应一下，不然做动画截图有问题
+        [self displayContentController:leftViewController];
+        [self hideContentController:leftViewController];
+        
         [self displayContentController:rightViewController];
         self.visibleViewController = rightViewController;
         
