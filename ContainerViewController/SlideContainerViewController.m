@@ -538,25 +538,25 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 //controller 截图
 - (UIImage *)snapShotController:(UIViewController *)controller {
  
-    
-    CGFloat scale = [[UIScreen mainScreen] scale];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(nativeScale)]) {
-        scale = [[UIScreen mainScreen] nativeScale];
-    }
-#endif
-    CGSize size = controller.view.frame.size;
-    
-    UIGraphicsBeginImageContextWithOptions(size, YES, scale);
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [controller.view.layer renderInContext:context];
-    
+    return [SlideContainerViewController snapImageOfView:controller.view scale:1.0];
+}
 
-    UIImage *returnImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return returnImage;
++(UIImage *)snapImageOfView:(UIView *)aView scale:(CGFloat)aScale{
+    if([[[UIDevice currentDevice] systemVersion] floatValue]>=7.0){
+        UIGraphicsBeginImageContextWithOptions(aView.bounds.size, NO, aScale);
+        [aView drawViewHierarchyInRect:aView.bounds afterScreenUpdates:YES];
+        UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return copied;
+    }
+    else
+    {
+        UIGraphicsBeginImageContextWithOptions(aView.bounds.size, NO, aScale);
+        [aView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return copied;
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
