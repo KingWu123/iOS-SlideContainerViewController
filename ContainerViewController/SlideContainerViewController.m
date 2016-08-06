@@ -538,26 +538,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 //controller 截图
 - (UIImage *)snapShotController:(UIViewController *)controller {
  
-    return [SlideContainerViewController snapImageOfView:controller.view scale:1.0];
+    UIGraphicsBeginImageContextWithOptions(controller.view.bounds.size, YES, 0.0);
+    [controller.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return copied;
+
 }
 
-+(UIImage *)snapImageOfView:(UIView *)aView scale:(CGFloat)aScale{
-    if([[[UIDevice currentDevice] systemVersion] floatValue]>=7.0){
-        UIGraphicsBeginImageContextWithOptions(aView.bounds.size, NO, aScale);
-        [aView drawViewHierarchyInRect:aView.bounds afterScreenUpdates:YES];
-        UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return copied;
-    }
-    else
-    {
-        UIGraphicsBeginImageContextWithOptions(aView.bounds.size, NO, aScale);
-        [aView.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return copied;
-    }
-}
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
