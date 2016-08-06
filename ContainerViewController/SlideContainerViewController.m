@@ -178,20 +178,20 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
  *  @param newVC           新的要显示的child vc
  *  @param direction       出现的方向
  *  @param toVCBeginFrame  newVC开始是的frame
+ *
+ * 注：beginAppearanceTransition和endAppearanceTransition调用顺序不要改变
  */
 - (void)transitionFromViewController: (UIViewController*) oldVC
                     toViewController: (UIViewController*) newVC  direction:(SHOW_SUBVC_DIRECTION)direction toVCBeginFrame:(CGRect)toVCBeginFrame{
-    // Prepare the two view controllers for the change.
+  
     [oldVC willMoveToParentViewController:nil];
-    [self addChildViewController:newVC];
+    [oldVC beginAppearanceTransition: NO animated: YES];
     
-    // Get the start frame of the new view controller and the end frame
-    // for the old view controller. Both rectangles are offscreen.
+    
+    [self addChildViewController:newVC];
+    [newVC beginAppearanceTransition: YES animated: YES];
     newVC.view.frame = toVCBeginFrame;
     CGRect endFrame = [self oldViewEndFrame:direction];
-    
-    [oldVC beginAppearanceTransition: NO animated: YES];
-    [newVC beginAppearanceTransition: YES animated: YES];
     [self.wrapperView addSubview:newVC.view];
     
     [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME delay:0.0 options:(7 << 16) animations:^{
@@ -206,12 +206,12 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     } completion:^(BOOL finished) {
         
         [oldVC.view removeFromSuperview];
-        
         [oldVC endAppearanceTransition];
-        [newVC endAppearanceTransition];
-        
         [oldVC removeFromParentViewController];
+        
+        [newVC endAppearanceTransition];
         [newVC didMoveToParentViewController:self];
+
     }];
     
     
