@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "UIViewController+SlideContainerViewController.h"
 
-@interface ViewController ()
+@interface ViewController ()<UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scorllView;
 
 @end
@@ -19,8 +19,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.scorllView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
+    self.scorllView.contentSize = CGSizeMake(self.view.frame.size.width * 4, self.view.frame.size.height);
+    self.scorllView.pagingEnabled = YES;
+    self.scorllView.delegate = self;
     // Do any additional setup after loading the view, typically from a nib.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewDidEndDecelerating:) name:USER_CENTER_COMING_TO_SHOW_NOTIFICATION object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,6 +54,16 @@
 - (IBAction)userCenterPressed:(id)sender {
     [self.slideContainerViewController showLeftViewWithAnimated:YES];
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSLog(@"offsetX = %f", scrollView.contentOffset.x);
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    // NSLog(@"222222");
+}
+
+
+
 
 
 @end

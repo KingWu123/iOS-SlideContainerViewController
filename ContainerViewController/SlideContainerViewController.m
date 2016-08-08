@@ -372,6 +372,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             self.panGestureLastMoveType = PanGestureMoveRight;
         }
         
+        //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
+        [self removeConflictGesturesTouchEvent];
+        
         
     }else if (recognizer.state == UIGestureRecognizerStateChanged){
         
@@ -403,9 +406,6 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             //rightVC
             CGRect rightVCFrame = self.rightViewController.view.frame;
             self.rightViewController.view.frame = CGRectMake(offset.x/3, rightVCFrame.origin.y, rightVCFrame.size.width, rightVCFrame.size.height);
-            
-            //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
-            [self removeConflictGesturesTouchEvent];
             
         }else{
             return;
@@ -473,6 +473,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             self.panGestureLastMoveType = PanGestureMoveRight;
         }
         
+        //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
+        [self removeConflictGesturesTouchEvent];
+
     }else if (recognizer.state == UIGestureRecognizerStateChanged){
         
         CGPoint offset = [recognizer translationInView:self.wrapperView];
@@ -504,8 +507,6 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             CGRect leftVCFrame = self.leftViewController.view.frame;
             self.leftViewController.view.frame = CGRectMake(offset.x, leftVCFrame.origin.y, leftVCFrame.size.width, leftVCFrame.size.height);
 
-            //这个时候，说明正在进行手势跟随， 所以可以移除其它冲突的手势
-            [self removeConflictGesturesTouchEvent];
             
         }else{
             return;
@@ -587,6 +588,5 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
     [self.conflictGestures removeAllObjects];
 }
-
 
 @end
