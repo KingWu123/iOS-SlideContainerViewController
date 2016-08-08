@@ -184,6 +184,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 - (void)transitionFromViewController: (UIViewController*) oldVC
                     toViewController: (UIViewController*) newVC  direction:(SHOW_SUBVC_DIRECTION)direction toVCBeginFrame:(CGRect)toVCBeginFrame{
   
+    
     [oldVC willMoveToParentViewController:nil];
     [oldVC beginAppearanceTransition: NO animated: YES];
     
@@ -194,6 +195,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     CGRect endFrame = [self oldViewEndFrame:direction];
     [self.wrapperView addSubview:newVC.view];
     
+    [self.transitionView setUserInteractionEnabled:NO];
     [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME delay:0.0 options:(7 << 16) animations:^{
         newVC.view.frame = self.wrapperView.bounds;
         oldVC.view.frame = endFrame;
@@ -211,6 +213,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
         [newVC endAppearanceTransition];
         [newVC didMoveToParentViewController:self];
+        
+        [self.transitionView setUserInteractionEnabled:YES];
 
     }];
     
@@ -421,6 +425,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         }
         //否则，删除界面
         else{
+            
+            [self.transitionView setUserInteractionEnabled:NO];
             [UIView animateWithDuration: CONTAIN_VIEW_AIMATION_TIME
                                   delay: 0.0
                                 options: (7 << 16)
@@ -430,6 +436,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                              }
                              completion:^(BOOL finished) {
                                  [self.leftVCSnapShotImageView removeFromSuperview];
+                                 
+                                 [self.transitionView setUserInteractionEnabled:YES];
                              }] ;
             
         }
@@ -516,6 +524,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         //如果最后一次向右滑动， 界面还原
         else if (self.panGestureLastMoveType == PanGestureMoveRight)
         {
+            [self.transitionView setUserInteractionEnabled:NO];
             [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME
                                   delay:0.0
                                 options: (7 << 16)
@@ -526,6 +535,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
                              }
                              completion:^(BOOL finished) {
                                  [self.rightVCSnapShotImageView removeFromSuperview];
+                                 
+                                 [self.transitionView setUserInteractionEnabled:YES];
                              }];
 
         }
