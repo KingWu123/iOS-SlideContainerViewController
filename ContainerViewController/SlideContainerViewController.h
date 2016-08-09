@@ -11,14 +11,21 @@
 
 
 /**
- *  实现类似于QQ的  个人账号界面 和 主界面 打开效果的ContianViewController
+ *  一个ContainerViewController,  包含Right/left的两个子ViewController,可以实现其左滑，右滑显示的效果。
  */
 
 
 @interface SlideContainerViewController : UIViewController
 
 
-
+/**
+ *  初始化函数
+ *
+ *  @param rightViewController 滑动右边的VC
+ *  @param leftViewController  滑动左边的VC
+ *
+ *  @return SlideContainerViewController
+ */
 - (instancetype)initWithRightViewController:(UIViewController *)rightViewController withLeftViewController:(UIViewController *)leftViewController;
 
 

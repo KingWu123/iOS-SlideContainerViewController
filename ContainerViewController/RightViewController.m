@@ -7,7 +7,7 @@
 //
 
 #import "RightViewController.h"
-#import "UIViewController+SlideContainerViewController.h"
+#import "SlideContainerViewController.h"
 
 @interface RightViewController ()
 

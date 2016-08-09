@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+SlideContainerViewController.h"
+#import "SlideContainerViewController.h"
 
 @implementation UIViewController (SlideContainerViewController)
 

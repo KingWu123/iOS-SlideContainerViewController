@@ -14,14 +14,20 @@ UIViewController *leftVC  = ....
 
 UIViewController *rightVC = ....
 
-//default show RightVC	
+<font color=red>//default show rightChild VC</font>  
 SlideContainerViewController *slideContainerVC =  [[SlideContainerViewController alloc]initWithRightViewController:rightVC withLeftViewController:leftVC];
 
-//show  reftChild VC	
+<font color=red>//show  reftChild VC</font>  	
 [slideContainerVC showLeftViewWithAnimated:YES];
 
-//show rightChild VC	
+<font color=red>//show  rightChild VC</font>  	
 [slideContainerVC showRightViewWithAnimated:YES];
+
+<font color=red>//if want to show leftVC, add this method to you viewcontroller</font>  
+- (BOOL)needShowLeftChildVCWhenGestureBegin:(CGPoint)location{
+	return NO;
+}
+
 
 ##Release Notes
 ####version 1.0
@@ -29,20 +35,20 @@ SlideContainerViewController *slideContainerVC =  [[SlideContainerViewController
 
 ###version 1.1
 不再用截图来做手势跟随的动画，而是直接用子view,
-这样调用的方式跟系统的NavigationController手势跟随是一样的，即
+这样调用的方式跟系统的NavigationController手势跟随是一样的，vc的调用顺序为：
 
-![image](/Users/kingwu/Desktop/0505e002b8c475ad20bc36bc4893fdfe.jpg)
-oldVC            newVC
-手势跟随开始:
-willDisAppear    
-				willAppear
 
-a)手势跟随结束， 新界面展示：
-did DisAppear
-               didAppear
+oldVC　　　　　newVC	
+手势跟随开始:		
+willDisAppear					 
+　　　　　　　　willAppear
+
+a)手势跟随结束， 新界面展示：	
+did DisAppear	
+　　　　　　　　didAppear
                
-b)手势跟随结束，新界面没有打开：
-				willDisAppear
-				didDisAppear
-willAppear
+b)手势跟随结束，新界面没有打开：		
+　　　　　　　　willDisAppear	
+　　　　　　　　didDisAppear	
+willAppear	
 didAppear

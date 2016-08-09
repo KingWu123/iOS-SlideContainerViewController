@@ -26,19 +26,18 @@
 @end
 
 
-/**
- *  实现类似于QQ的  个人账号界面 和 主界面 打开效果的ContianViewController
- */
+
 
 #define CONTAIN_VIEW_AIMATION_TIME  0.3
 @interface SlideContainerViewController ()<UIGestureRecognizerDelegate>
 
 
 typedef NS_ENUM(NSInteger, SHOW_SUBVC_DIRECTION) {
-    FROM_LEFT_TO_RIGHT,  //左边的VC显示出来
-    FROM_RIGHT_TO_LEFT,  //右边的vC显示出来
+    FROM_LEFT_TO_RIGHT,  //从左向右滑动， 左边的VC将要显示出来
+    FROM_RIGHT_TO_LEFT,  //从右先做滑动， 右边的VC将要显示出来
 };
 
+//手势的移动方向
 typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     PanGestureMoveLeft = 0,
     PanGestureMoveRight,
@@ -85,14 +84,10 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         [self.transitionView addSubview:wrapperView];
         self.wrapperView =wrapperView;
         
+        //
         self.rightViewController = rightViewController;
         self.leftViewController = leftViewController;
         
-        
-        
-        //这里主要是让 leftView的view自适应一下，不然做动画截图有问题
-        [self displayContentController:leftViewController];
-        [self hideContentController:leftViewController];
         
         [self displayContentController:rightViewController];
         self.visibleViewController = rightViewController;
@@ -135,7 +130,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }
     
     if (animated){
-        [self transitionFromViewController:self.rightViewController toViewController:self.leftViewController direction:FROM_LEFT_TO_RIGHT newVCBeginFrame:[self newViewStartFrame:FROM_LEFT_TO_RIGHT]];
+        [self transitionFromViewController:self.rightViewController toViewController:self.leftViewController direction:FROM_LEFT_TO_RIGHT];
     }else{
         [self fromViewController:self.rightViewController toViewController:self.leftViewController];
     }
@@ -155,7 +150,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }
     
     if (animated){
-        [self transitionFromViewController:self.leftViewController toViewController:self.rightViewController direction:FROM_RIGHT_TO_LEFT newVCBeginFrame:[self newViewStartFrame:FROM_RIGHT_TO_LEFT]];
+        [self transitionFromViewController:self.leftViewController toViewController:self.rightViewController direction:FROM_RIGHT_TO_LEFT];
     }else{
         [self fromViewController:self.leftViewController toViewController:self.rightViewController];
     }
@@ -171,14 +166,12 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
  *  @param oldVC           老的child vc
  *  @param newVC           新的要显示的child vc
  *  @param direction       出现的方向
- *  @param newVCBeginFrame  newVC开始是的frame
  *
  * 注：beginAppearanceTransition和endAppearanceTransition调用顺序不要改变
  */
 - (void)transitionFromViewController: (UIViewController*) oldVC
                     toViewController: (UIViewController*) newVC
-                           direction:(SHOW_SUBVC_DIRECTION)direction
-                      newVCBeginFrame:(CGRect)newVCBeginFrame{
+                           direction:(SHOW_SUBVC_DIRECTION)direction{
   
     
     [oldVC willMoveToParentViewController:nil];
@@ -187,7 +180,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
     [self addChildViewController:newVC];
     [newVC beginAppearanceTransition: YES animated: YES];
-    newVC.view.frame = newVCBeginFrame;
+    newVC.view.frame = [self newViewStartFrame:direction];
     CGRect endFrame = [self oldViewEndFrame:direction];
     [self.wrapperView addSubview:newVC.view];
     
@@ -214,30 +207,6 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 
     }];
     
-    
-    /*下面的newVC的viewDidAppear 和  oldVC viewDidDisappear 调用时序反了
-    // Queue up the transition animation.
-    [self transitionFromViewController: oldVC
-                      toViewController: newVC
-                              duration: CONTAIN_VIEW_AIMATION_TIME
-                               options: (7 << 16)
-                            animations:^{
-                                // Animate the views to their final positions.
-                                newVC.view.frame = self.wrapperView.bounds;
-                                oldVC.view.frame = endFrame;
-                                
-                                if (direction == FROM_RIGHT_TO_LEFT){
-                                    [self.wrapperView bringSubviewToFront:oldVC.view];
-                                }
-                            }
-                            completion:^(BOOL finished) {
-                                // Remove the old view controller and send the final
-                                // notification to the new view controller.
-                                [oldVC removeFromParentViewController];
-                                [newVC didMoveToParentViewController:self];
-                                
-                            }];
-     */
 }
 
 
@@ -299,7 +268,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
 }
 
-//移除一个child VC
+//不显示一个child VC
 - (void)hideContentController:(UIViewController *)contentViewController{
     
     [contentViewController willMoveToParentViewController:nil];
@@ -322,11 +291,9 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 }
 
 
-//手势更随，当前显示的是rightVC, leftVC 将要显示出来的效果
+//手势更随，当前显示的是rightVC, 从左向右滑，leftVC将要显示出来
 - (void)handleLeftVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer{
     
-    //用一张截图做动画
-
     if (recognizer.state == UIGestureRecognizerStateBegan){
 
         //rightViewController将要不显示
@@ -369,8 +336,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         self.panGesturePreOffset = offset;
         
         if (offset.x > 0){
-            
-            //leftSnapshotImageView
+        
             //leftVC frame
             CGRect originFrame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
             CGRect leftChildRootViewFrame =  CGRectMake(
@@ -394,73 +360,81 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 
     }else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled){
         
-        //如果的距离超过1/3，或者向右滑动的话， 则显示出界面，
-        if (fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width) >= self.wrapperView.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
-        {
-            float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
-            
-            [self.transitionView setUserInteractionEnabled:NO];
-            [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
-                
-                self.leftViewController.view.frame = self.wrapperView.bounds;
-                self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
-                
-            } completion:^(BOOL finished) {
-                //rightVC did remove
-                [self.rightViewController.view removeFromSuperview];
-                [self.rightViewController endAppearanceTransition];
-                [self.rightViewController removeFromParentViewController];
-                
-                //leftVC did add
-                [self.leftViewController endAppearanceTransition];
-                [self.leftViewController didMoveToParentViewController:self];
-                
-                [self.transitionView setUserInteractionEnabled:YES];
-            }];
-            
-        
-            self.visibleViewController = self.leftViewController;
-            
-        }
-        //否则，删除界面
-        else{
-            
-            float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
-            
-            [UIView animateWithDuration: time
-                                  delay: 0.0
-                                options: (7 << 16)
-                             animations:^{
-                                 self.leftViewController.view.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
-                                 self.rightViewController.view.frame = self.wrapperView.bounds;
-                                 
-                             }
-                             completion:^(BOOL finished) {
-                                 
-                                 //leftViewChildController
-                                 [self.leftViewController willMoveToParentViewController:nil];
-                                 [self.leftViewController beginAppearanceTransition: NO animated: YES];
-                                 
-                                 [self.leftViewController.view removeFromSuperview];
-                                 [self.leftViewController endAppearanceTransition];
-                                 [self.leftViewController removeFromParentViewController];
-                                 
-                                 //rightViewChildController
-                                 [self.rightViewController willMoveToParentViewController:self];
-                                 [self.rightViewController beginAppearanceTransition: YES animated: YES];
-                                 
-                                 [self.rightViewController endAppearanceTransition];
-                                 [self.rightViewController didMoveToParentViewController:self];
-                                 
-                                 
-                                 [self.transitionView setUserInteractionEnabled:YES];
-                             }] ;
-            
-        }
+        //手势结束，根据最后的手势情况，决定leftVC是显示出来，还是回退回去
+        [self leftVCBackOrShow];
     }
 }
 
-//手势更随，当前显示的是LeftVC, rightVC 将要显示出来
+//从左向右滑动的手势结束后， leftChildVC是回退回去，还是显示出来
+- (void)leftVCBackOrShow{
+    
+    //如果的距离超过1/3，或者向右滑动的话， 则显示出左界面，
+    if (fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width) >= self.wrapperView.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
+    {
+        float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+        
+        [self.transitionView setUserInteractionEnabled:NO];
+        [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
+            
+            self.leftViewController.view.frame = self.wrapperView.bounds;
+            self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
+            
+        } completion:^(BOOL finished) {
+            //rightVC did remove
+            [self.rightViewController.view removeFromSuperview];
+            [self.rightViewController endAppearanceTransition];
+            [self.rightViewController removeFromParentViewController];
+            
+            //leftVC did add
+            [self.leftViewController endAppearanceTransition];
+            [self.leftViewController didMoveToParentViewController:self];
+            
+            [self.transitionView setUserInteractionEnabled:YES];
+        }];
+        
+        
+        self.visibleViewController = self.leftViewController;
+        
+    }
+    //否则，界面回退回去
+    else{
+        
+        float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+        
+        [UIView animateWithDuration: time
+                              delay: 0.0
+                            options: (7 << 16)
+                         animations:^{
+                             self.leftViewController.view.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
+                             self.rightViewController.view.frame = self.wrapperView.bounds;
+                             
+                         }
+                         completion:^(BOOL finished) {
+                             
+                             //leftViewChildController
+                             [self.leftViewController willMoveToParentViewController:nil];
+                             [self.leftViewController beginAppearanceTransition: NO animated: YES];
+                             
+                             [self.leftViewController.view removeFromSuperview];
+                             [self.leftViewController endAppearanceTransition];
+                             [self.leftViewController removeFromParentViewController];
+                             
+                             //rightViewChildController
+                             [self.rightViewController willMoveToParentViewController:self];
+                             [self.rightViewController beginAppearanceTransition: YES animated: YES];
+                             
+                             [self.rightViewController endAppearanceTransition];
+                             [self.rightViewController didMoveToParentViewController:self];
+                             
+                             
+                             [self.transitionView setUserInteractionEnabled:YES];
+                         }] ;
+        
+    }
+}
+
+
+//手势更随，当前显示的是LeftVC, 从右向左滑， rightVC 将要显示出来
 - (void)handleRightVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer {
 
     
@@ -507,7 +481,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         
         if (offset.x < 0){
             
-            //rightVCSnapShotImageView Frame
+            //rightChildFrame
             CGRect originFrame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
             CGRect rightChildFrame =  CGRectMake(
                                                  originFrame.origin.x + offset.x/3,
@@ -527,73 +501,77 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         }
         
     }else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled){
-        
-        //如果最后一次是向左滑动, 界面退出，
-        if (self.panGestureLastMoveType == PanGestureMoveLeft){
-            
-            float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
-            
-            
-            [self.transitionView setUserInteractionEnabled:NO];
-            [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
-                
-                self.rightViewController.view.frame = self.wrapperView.bounds;
-                self.leftViewController.view.frame = [self oldViewEndFrame:FROM_RIGHT_TO_LEFT];
-                
-            } completion:^(BOOL finished) {
-                [self.leftViewController.view removeFromSuperview];
-                [self.leftViewController endAppearanceTransition];
-                [self.leftViewController removeFromParentViewController];
-                
-                [self.rightViewController endAppearanceTransition];
-                [self.rightViewController didMoveToParentViewController:self];
-                
-                [self.transitionView setUserInteractionEnabled:YES];
-            }];
-
-            
-            self.visibleViewController = self.rightViewController;
-        }
-        //如果最后一次向右滑动， 界面还原
-        else if (self.panGestureLastMoveType == PanGestureMoveRight)
-        {
-            float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
-            
-            [self.transitionView setUserInteractionEnabled: NO];
-            
-            
-            [UIView animateWithDuration: time
-                                  delay: 0.0
-                                options: (7 << 16)
-                             animations:^{
-                                 self.leftViewController.view.frame = self.wrapperView.bounds;
-                                 self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
-                                 
-                             }
-                             completion:^(BOOL finished) {
-                                 
-                                 //rightViewChildController
-                                 [self.rightViewController willMoveToParentViewController:nil];
-                                 [self.rightViewController beginAppearanceTransition: NO animated: YES];
-                                 
-                                 [self.rightViewController.view removeFromSuperview];
-                                 [self.rightViewController endAppearanceTransition];
-                                 [self.rightViewController removeFromParentViewController];
-                                 
-                                 //leftViewChildController
-                                 [self.leftViewController willMoveToParentViewController:self];
-                                 [self.leftViewController beginAppearanceTransition: YES animated: YES];
-                                 
-                                 [self.leftViewController endAppearanceTransition];
-                                 [self.leftViewController didMoveToParentViewController:self];
-                                 
-                                 
-                                 [self.transitionView setUserInteractionEnabled:YES];
-                             }] ;
-
-        }
+        //手势结束，根据最后的手势情况，决定rightVC是显示出来，还是回退回去
+        [self rightVCBackOrShow];
     }
-    
+}
+
+//从右向左滑动的手势结束后， rightChildVC是回退回去，还是显示出来
+- (void)rightVCBackOrShow{
+    //如果最后一次是向左滑动, 界面退出，
+    if (self.panGestureLastMoveType == PanGestureMoveLeft){
+        
+        float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+        
+        
+        [self.transitionView setUserInteractionEnabled:NO];
+        [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
+            
+            self.rightViewController.view.frame = self.wrapperView.bounds;
+            self.leftViewController.view.frame = [self oldViewEndFrame:FROM_RIGHT_TO_LEFT];
+            
+        } completion:^(BOOL finished) {
+            [self.leftViewController.view removeFromSuperview];
+            [self.leftViewController endAppearanceTransition];
+            [self.leftViewController removeFromParentViewController];
+            
+            [self.rightViewController endAppearanceTransition];
+            [self.rightViewController didMoveToParentViewController:self];
+            
+            [self.transitionView setUserInteractionEnabled:YES];
+        }];
+        
+        
+        self.visibleViewController = self.rightViewController;
+    }
+    //如果最后一次向右滑动， 界面还原
+    else if (self.panGestureLastMoveType == PanGestureMoveRight)
+    {
+        float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+        
+        [self.transitionView setUserInteractionEnabled: NO];
+        
+        
+        [UIView animateWithDuration: time
+                              delay: 0.0
+                            options: (7 << 16)
+                         animations:^{
+                             self.leftViewController.view.frame = self.wrapperView.bounds;
+                             self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
+                             
+                         }
+                         completion:^(BOOL finished) {
+                             
+                             //rightViewChildController
+                             [self.rightViewController willMoveToParentViewController:nil];
+                             [self.rightViewController beginAppearanceTransition: NO animated: YES];
+                             
+                             [self.rightViewController.view removeFromSuperview];
+                             [self.rightViewController endAppearanceTransition];
+                             [self.rightViewController removeFromParentViewController];
+                             
+                             //leftViewChildController
+                             [self.leftViewController willMoveToParentViewController:self];
+                             [self.leftViewController beginAppearanceTransition: YES animated: YES];
+                             
+                             [self.leftViewController endAppearanceTransition];
+                             [self.leftViewController didMoveToParentViewController:self];
+                             
+                             
+                             [self.transitionView setUserInteractionEnabled:YES];
+                         }] ;
+        
+    }
 }
 
 
@@ -616,19 +594,19 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 }
 
 
-
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     
     if (gestureRecognizer == self.panGesture){
         // 如果otherGestureRecognizer是scrollview 判断scrollview的contentOffset.x 是否小于等于0，YES
         if ([[otherGestureRecognizer view] isKindOfClass:[UIScrollView class]]) {
             
-            UIScrollView *scrollView = (UIScrollView *)[otherGestureRecognizer view];
-            if (scrollView.contentOffset.x <= 0) {
-                
-                [self.conflictGestures addObject:otherGestureRecognizer];
-                return YES;
-            }
+            return YES;
+//            UIScrollView *scrollView = (UIScrollView *)[otherGestureRecognizer view];
+//            if (scrollView.contentOffset.x <= 0) {
+//                
+//                [self.conflictGestures addObject:otherGestureRecognizer];
+//                return YES;
+//            }
         }
     }
     return NO;

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SlideContainerViewController.h"
+@class SlideContainerViewController;
 
 @interface UIViewController (SlideContainerViewController)
 
