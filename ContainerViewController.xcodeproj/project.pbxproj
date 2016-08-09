@@ -19,6 +19,7 @@
 		755C89F51D48DE93004487EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755C89F31D48DE93004487EA /* LaunchScreen.storyboard */; };
 		755C8A001D48DE93004487EA /* ContainerViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89FF1D48DE93004487EA /* ContainerViewControllerTests.m */; };
 		755C8A0B1D48DE93004487EA /* ContainerViewControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C8A0A1D48DE93004487EA /* ContainerViewControllerUITests.m */; };
+		7562E9C01D597E0200F5AAED /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7562E9BF1D597E0200F5AAED /* DetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		755C8A061D48DE93004487EA /* ContainerViewControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContainerViewControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		755C8A0A1D48DE93004487EA /* ContainerViewControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContainerViewControllerUITests.m; sourceTree = "<group>"; };
 		755C8A0C1D48DE93004487EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7562E9BE1D597E0200F5AAED /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		7562E9BF1D597E0200F5AAED /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,8 @@
 				755C89E91D48DE93004487EA /* AppDelegate.m */,
 				755C89EB1D48DE93004487EA /* ViewController.h */,
 				755C89EC1D48DE93004487EA /* ViewController.m */,
+				7562E9BE1D597E0200F5AAED /* DetailViewController.h */,
+				7562E9BF1D597E0200F5AAED /* DetailViewController.m */,
 				755C89EE1D48DE93004487EA /* Main.storyboard */,
 				755673EC1D49A3760074837E /* UserCenterViewController.h */,
 				755673ED1D49A3760074837E /* UserCenterViewController.m */,
@@ -298,6 +303,7 @@
 				755674431D49DE600074837E /* UIViewController+SlideContainerViewController.m in Sources */,
 				755C89E71D48DE93004487EA /* main.m in Sources */,
 				755673F31D49B3930074837E /* SlideContainerViewController.m in Sources */,
+				7562E9C01D597E0200F5AAED /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

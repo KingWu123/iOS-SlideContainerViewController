@@ -35,8 +35,8 @@
 
 
 typedef NS_ENUM(NSInteger, SHOW_SUBVC_DIRECTION) {
-    FROM_LEFT_TO_RIGHT,
-    FROM_RIGHT_TO_LEFT,
+    FROM_LEFT_TO_RIGHT,  //左边的VC显示出来
+    FROM_RIGHT_TO_LEFT,  //右边的vC显示出来
 };
 
 typedef NS_ENUM(NSInteger, PanGestureMoveType) {
@@ -47,12 +47,8 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 
 @property (nonatomic, strong)UIViewController *rightViewController;
 @property (nonatomic, strong)UIViewController *leftViewController;
-
 @property (nonatomic, weak)UIViewController *visibleViewController;
 
-
-@property (nonatomic, strong)UIImageView *rightVCSnapShotImageView;
-@property (nonatomic, strong)UIImageView *leftVCSnapShotImageView;
 
 @property (nonatomic, strong)UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign)CGPoint panGesturePreOffset;
@@ -106,8 +102,6 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         self.panGesture.delegate = self;
         [self.transitionView addGestureRecognizer:self.panGesture];
         
-         self.leftVCSnapShotImageView = [[UIImageView alloc]init];
-         self.rightVCSnapShotImageView = [[UIImageView alloc]init];
         
         self.conflictGestures = [[NSMutableSet alloc]init];
     }
@@ -141,7 +135,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }
     
     if (animated){
-        [self transitionFromViewController:self.rightViewController toViewController:self.leftViewController direction:FROM_LEFT_TO_RIGHT toVCBeginFrame:[self newViewStartFrame:FROM_LEFT_TO_RIGHT]];
+        [self transitionFromViewController:self.rightViewController toViewController:self.leftViewController direction:FROM_LEFT_TO_RIGHT newVCBeginFrame:[self newViewStartFrame:FROM_LEFT_TO_RIGHT]];
     }else{
         [self fromViewController:self.rightViewController toViewController:self.leftViewController];
     }
@@ -161,7 +155,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }
     
     if (animated){
-        [self transitionFromViewController:self.leftViewController toViewController:self.rightViewController direction:FROM_RIGHT_TO_LEFT toVCBeginFrame:[self newViewStartFrame:FROM_RIGHT_TO_LEFT]];
+        [self transitionFromViewController:self.leftViewController toViewController:self.rightViewController direction:FROM_RIGHT_TO_LEFT newVCBeginFrame:[self newViewStartFrame:FROM_RIGHT_TO_LEFT]];
     }else{
         [self fromViewController:self.leftViewController toViewController:self.rightViewController];
     }
@@ -177,12 +171,14 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
  *  @param oldVC           老的child vc
  *  @param newVC           新的要显示的child vc
  *  @param direction       出现的方向
- *  @param toVCBeginFrame  newVC开始是的frame
+ *  @param newVCBeginFrame  newVC开始是的frame
  *
  * 注：beginAppearanceTransition和endAppearanceTransition调用顺序不要改变
  */
 - (void)transitionFromViewController: (UIViewController*) oldVC
-                    toViewController: (UIViewController*) newVC  direction:(SHOW_SUBVC_DIRECTION)direction toVCBeginFrame:(CGRect)toVCBeginFrame{
+                    toViewController: (UIViewController*) newVC
+                           direction:(SHOW_SUBVC_DIRECTION)direction
+                      newVCBeginFrame:(CGRect)newVCBeginFrame{
   
     
     [oldVC willMoveToParentViewController:nil];
@@ -191,7 +187,7 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     
     [self addChildViewController:newVC];
     [newVC beginAppearanceTransition: YES animated: YES];
-    newVC.view.frame = toVCBeginFrame;
+    newVC.view.frame = newVCBeginFrame;
     CGRect endFrame = [self oldViewEndFrame:direction];
     [self.wrapperView addSubview:newVC.view];
     
@@ -317,30 +313,12 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 #pragma mark - PanGesture
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)recognizer{
  
-    static BOOL isRecognizerSuccess = NO;
-    if (recognizer.state == UIGestureRecognizerStateBegan){
-        
-        CGPoint beginPositon = [recognizer locationInView:self.transitionView];
-        
-        
-        if ((beginPositon.x < 50 && self.visibleViewController == _rightViewController)
-            || (beginPositon.x > [[UIScreen mainScreen] bounds].size.width - 60 && self.visibleViewController == _leftViewController)){
-            isRecognizerSuccess = YES;
-        }else{
-            isRecognizerSuccess = NO;
-        }
-    }
-    
-    
-    //想拉出左界面，只有从屏幕的最左边拉出，界面才需要显示
-    if(self.visibleViewController == _rightViewController && isRecognizerSuccess){
+    //只有从屏幕的最左边拉出，界面才需要显示
+    if(self.visibleViewController == _rightViewController ){
         [self handleLeftVCShowPanGestureRecognizer:recognizer];
-    }
-    //想拉叔右界面，只有从屏幕最右边拉出，界面才需要显示
-    else if (self.visibleViewController == _leftViewController && isRecognizerSuccess){
+    }else if (self.visibleViewController == _leftViewController){
         [self handleRightVCShowPanGestureRecognizer:recognizer];
     }
-
 }
 
 
@@ -351,15 +329,15 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 
     if (recognizer.state == UIGestureRecognizerStateBegan){
 
-        UIImage *leftVCSnapShotImage = [self snapShotController:self.leftViewController];
-        self.leftVCSnapShotImageView.image = leftVCSnapShotImage;
+        //rightViewController将要不显示
+        [self.rightViewController willMoveToParentViewController:nil];
+        [self.rightViewController beginAppearanceTransition: NO animated: YES];
         
-        
-        if (![self.leftVCSnapShotImageView isDescendantOfView:self.wrapperView]){
-            [self.wrapperView addSubview:self.leftVCSnapShotImageView];
-        }
-        self.leftVCSnapShotImageView.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
-        
+        //leftViewcontroller将要显示
+        [self addChildViewController:self.leftViewController];
+        [self.leftViewController beginAppearanceTransition: YES animated: YES];
+        self.leftViewController.view.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
+        [self.wrapperView addSubview:self.leftViewController.view];
         
         CGPoint offset = [recognizer translationInView:self.wrapperView];
         self.panGesturePreOffset = offset;
@@ -393,19 +371,22 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         if (offset.x > 0){
             
             //leftSnapshotImageView
+            //leftVC frame
             CGRect originFrame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
-            CGRect leftSnapShotImgViewFrame =  CGRectMake(
-                                                          originFrame.origin.x + offset.x,
-                                                          _leftVCSnapShotImageView.frame.origin.y,
-                                                          _leftVCSnapShotImageView.frame.size.width,
-                                                          _leftVCSnapShotImageView.frame
-                                                          .size.height);
+            CGRect leftChildRootViewFrame =  CGRectMake(
+                                                        originFrame.origin.x + offset.x,
+                                                        _leftViewController.view.frame.origin.y,
+                                                        _leftViewController.view.frame.size.width,
+                                                        _leftViewController.view.frame
+                                                        .size.height);
             
-            self.leftVCSnapShotImageView.frame = leftSnapShotImgViewFrame;
+            self.leftViewController.view.frame = leftChildRootViewFrame;
+
             
             //rightVC
             CGRect rightVCFrame = self.rightViewController.view.frame;
             self.rightViewController.view.frame = CGRectMake(offset.x/3, rightVCFrame.origin.y, rightVCFrame.size.width, rightVCFrame.size.height);
+
             
         }else{
             return;
@@ -414,28 +395,63 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled){
         
         //如果的距离超过1/3，或者向右滑动的话， 则显示出界面，
-        if (fabs(self.leftVCSnapShotImageView.frame.origin.x + self.leftVCSnapShotImageView.frame.size.width) >= self.wrapperView.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
+        if (fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width) >= self.wrapperView.frame.size.width/3  || self.panGestureLastMoveType == PanGestureMoveRight)
         {
-            [self.leftVCSnapShotImageView removeFromSuperview];
+            float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
             
-
-            [self transitionFromViewController:self.rightViewController toViewController:self.leftViewController direction:FROM_LEFT_TO_RIGHT toVCBeginFrame:self.leftVCSnapShotImageView.frame];
+            [self.transitionView setUserInteractionEnabled:NO];
+            [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
+                
+                self.leftViewController.view.frame = self.wrapperView.bounds;
+                self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
+                
+            } completion:^(BOOL finished) {
+                //rightVC did remove
+                [self.rightViewController.view removeFromSuperview];
+                [self.rightViewController endAppearanceTransition];
+                [self.rightViewController removeFromParentViewController];
+                
+                //leftVC did add
+                [self.leftViewController endAppearanceTransition];
+                [self.leftViewController didMoveToParentViewController:self];
+                
+                [self.transitionView setUserInteractionEnabled:YES];
+            }];
+            
+        
             self.visibleViewController = self.leftViewController;
             
         }
         //否则，删除界面
         else{
             
-            [self.transitionView setUserInteractionEnabled:NO];
-            [UIView animateWithDuration: CONTAIN_VIEW_AIMATION_TIME
+            float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+            
+            [UIView animateWithDuration: time
                                   delay: 0.0
                                 options: (7 << 16)
                              animations:^{
-                                 self.leftVCSnapShotImageView.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
+                                 self.leftViewController.view.frame = [self newViewStartFrame:FROM_LEFT_TO_RIGHT];
                                  self.rightViewController.view.frame = self.wrapperView.bounds;
+                                 
                              }
                              completion:^(BOOL finished) {
-                                 [self.leftVCSnapShotImageView removeFromSuperview];
+                                 
+                                 //leftViewChildController
+                                 [self.leftViewController willMoveToParentViewController:nil];
+                                 [self.leftViewController beginAppearanceTransition: NO animated: YES];
+                                 
+                                 [self.leftViewController.view removeFromSuperview];
+                                 [self.leftViewController endAppearanceTransition];
+                                 [self.leftViewController removeFromParentViewController];
+                                 
+                                 //rightViewChildController
+                                 [self.rightViewController willMoveToParentViewController:self];
+                                 [self.rightViewController beginAppearanceTransition: YES animated: YES];
+                                 
+                                 [self.rightViewController endAppearanceTransition];
+                                 [self.rightViewController didMoveToParentViewController:self];
+                                 
                                  
                                  [self.transitionView setUserInteractionEnabled:YES];
                              }] ;
@@ -444,23 +460,21 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
     }
 }
 
-        
-        
-
 //手势更随，当前显示的是LeftVC, rightVC 将要显示出来
 - (void)handleRightVCShowPanGestureRecognizer:(UIPanGestureRecognizer *)recognizer {
 
     
     if (recognizer.state == UIGestureRecognizerStateBegan){
-         //用一张截图做动画
-        UIImage *rightVCSnapShotImage = [self snapShotController:self.rightViewController];
-        self.rightVCSnapShotImageView.image = rightVCSnapShotImage;
         
-        if (![self.rightVCSnapShotImageView isDescendantOfView:self.wrapperView]){
-            [self.wrapperView insertSubview:self.rightVCSnapShotImageView atIndex:0];
-        }
-        self.rightVCSnapShotImageView.frame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
+        //leftViewController将要不显示
+        [self.leftViewController willMoveToParentViewController:nil];
+        [self.leftViewController beginAppearanceTransition: NO animated: YES];
         
+        //rightViewcontroller将要显示
+        [self addChildViewController:self.rightViewController];
+        [self.rightViewController beginAppearanceTransition: YES animated: YES];
+        self.rightViewController.view.frame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
+        [self.wrapperView insertSubview:self.rightViewController.view belowSubview:self.leftViewController.view];
         
         CGPoint offset = [recognizer translationInView:self.wrapperView];
         self.panGesturePreOffset = offset;
@@ -495,13 +509,13 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
             
             //rightVCSnapShotImageView Frame
             CGRect originFrame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
-            CGRect rightSnapShotImgViewFrame =  CGRectMake(
-                                                          originFrame.origin.x + offset.x/3,
-                                                          _rightVCSnapShotImageView.frame.origin.y,
-                                                          _rightVCSnapShotImageView.frame.size.width,
-                                                          _rightVCSnapShotImageView.frame
-                                                          .size.height);
-            self.rightVCSnapShotImageView.frame = rightSnapShotImgViewFrame;
+            CGRect rightChildFrame =  CGRectMake(
+                                                 originFrame.origin.x + offset.x/3,
+                                                 _rightViewController.view.frame.origin.y,
+                                                 _rightViewController.view.frame.size.width,
+                                                 _rightViewController.view.frame
+                                                 .size.height);
+            self.rightViewController.view.frame = rightChildFrame;
             
             //left VC
             CGRect leftVCFrame = self.leftViewController.view.frame;
@@ -517,28 +531,65 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
         //如果最后一次是向左滑动, 界面退出，
         if (self.panGestureLastMoveType == PanGestureMoveLeft){
             
-            [self.rightVCSnapShotImageView removeFromSuperview];
+            float time = fabs(self.leftViewController.view.frame.origin.x + self.leftViewController.view.frame.size.width)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
             
-            [self transitionFromViewController:self.leftViewController toViewController:self.rightViewController direction:FROM_RIGHT_TO_LEFT toVCBeginFrame:self.rightVCSnapShotImageView.frame];
+            
+            [self.transitionView setUserInteractionEnabled:NO];
+            [UIView animateWithDuration:time delay:0.0 options:(7 << 16) animations:^{
+                
+                self.rightViewController.view.frame = self.wrapperView.bounds;
+                self.leftViewController.view.frame = [self oldViewEndFrame:FROM_RIGHT_TO_LEFT];
+                
+            } completion:^(BOOL finished) {
+                [self.leftViewController.view removeFromSuperview];
+                [self.leftViewController endAppearanceTransition];
+                [self.leftViewController removeFromParentViewController];
+                
+                [self.rightViewController endAppearanceTransition];
+                [self.rightViewController didMoveToParentViewController:self];
+                
+                [self.transitionView setUserInteractionEnabled:YES];
+            }];
+
+            
             self.visibleViewController = self.rightViewController;
         }
         //如果最后一次向右滑动， 界面还原
         else if (self.panGestureLastMoveType == PanGestureMoveRight)
         {
-            [self.transitionView setUserInteractionEnabled:NO];
-            [UIView animateWithDuration:CONTAIN_VIEW_AIMATION_TIME
-                                  delay:0.0
+            float time = fabs(self.leftViewController.view.frame.origin.x)/self.leftViewController.view.frame.size.width * CONTAIN_VIEW_AIMATION_TIME;
+            
+            [self.transitionView setUserInteractionEnabled: NO];
+            
+            
+            [UIView animateWithDuration: time
+                                  delay: 0.0
                                 options: (7 << 16)
                              animations:^{
-                                 self.rightVCSnapShotImageView.frame = [self newViewStartFrame:FROM_RIGHT_TO_LEFT];
                                  self.leftViewController.view.frame = self.wrapperView.bounds;
+                                 self.rightViewController.view.frame = [self oldViewEndFrame:FROM_LEFT_TO_RIGHT];
                                  
                              }
                              completion:^(BOOL finished) {
-                                 [self.rightVCSnapShotImageView removeFromSuperview];
+                                 
+                                 //rightViewChildController
+                                 [self.rightViewController willMoveToParentViewController:nil];
+                                 [self.rightViewController beginAppearanceTransition: NO animated: YES];
+                                 
+                                 [self.rightViewController.view removeFromSuperview];
+                                 [self.rightViewController endAppearanceTransition];
+                                 [self.rightViewController removeFromParentViewController];
+                                 
+                                 //leftViewChildController
+                                 [self.leftViewController willMoveToParentViewController:self];
+                                 [self.leftViewController beginAppearanceTransition: YES animated: YES];
+                                 
+                                 [self.leftViewController endAppearanceTransition];
+                                 [self.leftViewController didMoveToParentViewController:self];
+                                 
                                  
                                  [self.transitionView setUserInteractionEnabled:YES];
-                             }];
+                             }] ;
 
         }
     }
@@ -546,20 +597,26 @@ typedef NS_ENUM(NSInteger, PanGestureMoveType) {
 }
 
 
-#pragma mark - snapShot
-//controller 截图
-- (UIImage *)snapShotController:(UIViewController *)controller {
- 
-    UIGraphicsBeginImageContextWithOptions(controller.view.bounds.size, YES, 0.0);
-    [controller.view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *copied = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return copied;
-
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
+    
+    [self.conflictGestures removeAllObjects];
+    
+    CGPoint    velocity = [gestureRecognizer velocityInView:self.transitionView];
+    CGPoint    location = [gestureRecognizer locationInView:self.transitionView];
+    CGPoint    offset = [gestureRecognizer translationInView:self.transitionView];
+    
+    float rangeWidth = [[UIScreen mainScreen] bounds].size.width/320.0 * 28;
+    if (self.visibleViewController == _rightViewController && velocity.x > 0 && location.x - offset.x < rangeWidth){
+        return YES;
+    }else if (self.visibleViewController == _leftViewController && velocity.x < 0 && location.x - offset.x > [[UIScreen mainScreen] bounds].size.width - 60){
+        return YES;
+    }
+    return NO;
 }
 
 
-#pragma mark - UIGestureRecognizerDelegate
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     
     if (gestureRecognizer == self.panGesture){

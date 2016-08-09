@@ -1,19 +1,18 @@
 //
-//  UserCenterViewController.m
+//  DetailViewController.m
 //  ContainerViewController
 //
-//  Created by king.wu on 7/28/16.
+//  Created by king.wu on 8/9/16.
 //  Copyright © 2016 king.wu. All rights reserved.
 //
 
-#import "UserCenterViewController.h"
-#import "UIViewController+SlideContainerViewController.h"
+#import "DetailViewController.h"
 
-@interface UserCenterViewController ()
+@interface DetailViewController ()
 
 @end
 
-@implementation UserCenterViewController
+@implementation DetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -24,36 +23,21 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    NSLog(@"userCenter  will appear");
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    NSLog(@"userCenter  did appear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    NSLog(@"userCenter  will disAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    NSLog(@"userCenter  did disAppear");
 }
-
-
-
-
-- (IBAction)showMainVC:(id)sender {
-    
-    [self.slideContainerViewController showRightViewWithAnimated:YES];
-}
-
 /*
 #pragma mark - Navigation
 

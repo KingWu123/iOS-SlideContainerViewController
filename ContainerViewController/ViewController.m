@@ -23,8 +23,6 @@
     self.scorllView.pagingEnabled = YES;
     self.scorllView.delegate = self;
     // Do any additional setup after loading the view, typically from a nib.
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewDidEndDecelerating:) name:USER_CENTER_COMING_TO_SHOW_NOTIFICATION object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,18 +32,22 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    NSLog(@"mainVC  will appear");
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    NSLog(@"mainVC  did appear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    NSLog(@"mainVC  will disAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
+    NSLog(@"mainVC  did disAppear");
 }
 - (void)viewWillLayoutSubviews
 {
