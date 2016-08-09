@@ -1,18 +1,19 @@
 //
-//  DetailViewController.m
+//  RightViewController.m
 //  ContainerViewController
 //
 //  Created by king.wu on 8/9/16.
 //  Copyright © 2016 king.wu. All rights reserved.
 //
 
-#import "DetailViewController.h"
+#import "RightViewController.h"
+#import "UIViewController+SlideContainerViewController.h"
 
-@interface DetailViewController ()
+@interface RightViewController ()
 
 @end
 
-@implementation DetailViewController
+@implementation RightViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,21 +24,36 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    NSLog(@"rightVC  will appear");
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    NSLog(@"rightVC  did appear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    NSLog(@"rightVC  will disAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
+    NSLog(@"rightVC  did disAppear");
 }
+
+
+- (IBAction)leftVCBtnPressed:(id)sender {
+    [self.slideContainerViewController showLeftViewWithAnimated:YES];
+}
+
+
+
+
 /*
 #pragma mark - Navigation
 

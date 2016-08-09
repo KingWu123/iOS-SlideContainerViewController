@@ -1,19 +1,19 @@
 //
-//  UserCenterViewController.m
+//  LeftViewController.m
 //  ContainerViewController
 //
-//  Created by king.wu on 7/28/16.
+//  Created by king.wu on 8/9/16.
 //  Copyright © 2016 king.wu. All rights reserved.
 //
 
-#import "UserCenterViewController.h"
+#import "LeftViewController.h"
 #import "UIViewController+SlideContainerViewController.h"
 
-@interface UserCenterViewController ()
+@interface LeftViewController ()
 
 @end
 
-@implementation UserCenterViewController
+@implementation LeftViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,33 +26,32 @@
 }
 
 
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    NSLog(@"userCenter  will appear");
+    NSLog(@"LeftVC  will appear");
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    NSLog(@"userCenter  did appear");
+    NSLog(@"LeftVC  did appear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    NSLog(@"userCenter  will disAppear");
+    NSLog(@"LeftVC  will disAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    NSLog(@"userCenter  did disAppear");
+    NSLog(@"LeftVC  did disAppear");
 }
 
-
-
-
-- (IBAction)showMainVC:(id)sender {
+- (IBAction)rightVCBtnPressed:(id)sender {
     
     [self.slideContainerViewController showRightViewWithAnimated:YES];
 }
+
 
 /*
 #pragma mark - Navigation

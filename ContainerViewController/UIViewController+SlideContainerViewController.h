@@ -12,4 +12,6 @@
 @interface UIViewController (SlideContainerViewController)
 
 - (SlideContainerViewController *)slideContainerViewController;
+
+- (BOOL)needShowLeftChildVCWhenGestureBegin:(CGPoint)location;
 @end

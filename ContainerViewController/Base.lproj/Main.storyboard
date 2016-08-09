@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Right View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="RightViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -17,67 +17,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kMP-FZ-ZIf">
-                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="我是主界面主界面主界面主界面主界面主界面主界面主界面" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sf4-o4-lsH">
-                                        <rect key="frame" x="15" y="128" width="442" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
-                            </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="right VC interface" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sf4-o4-lsH">
+                                <rect key="frame" x="55" y="111" width="135" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kMP-FZ-ZIf" secondAttribute="bottom" id="GZ8-ti-lhC"/>
-                            <constraint firstAttribute="trailing" secondItem="kMP-FZ-ZIf" secondAttribute="trailing" id="NeP-6o-5Fr"/>
-                            <constraint firstItem="kMP-FZ-ZIf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="eA7-FN-NcD"/>
-                            <constraint firstAttribute="leading" secondItem="kMP-FZ-ZIf" secondAttribute="leading" id="jJX-xs-u1d"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="A67-S6-5xb">
                         <barButtonItem key="leftBarButtonItem" title="UserCenter" id="DJE-5g-ipZ">
                             <connections>
-                                <action selector="userCenterPressed:" destination="BYZ-38-t0r" id="Owd-Cv-wkz"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="LwE-tj-0Qh">
-                            <connections>
-                                <segue destination="e31-Bu-vCw" kind="show" id="AsE-HG-4uO"/>
+                                <action selector="leftVCBtnPressed:" destination="BYZ-38-t0r" id="PH7-Qf-KE7"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="scorllView" destination="kMP-FZ-ZIf" id="3Gm-4K-qGk"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1731" y="588"/>
-        </scene>
-        <!--Title-->
-        <scene sceneID="cht-ce-GxQ">
-            <objects>
-                <viewController id="e31-Bu-vCw" customClass="DetailViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="SBT-tV-w3x"/>
-                        <viewControllerLayoutGuide type="bottom" id="BEa-fc-umb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="F9G-Q9-fC6">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Title" id="G9J-xe-d4R">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="zEY-d4-dby"/>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wB3-UD-ctF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2532" y="621"/>
         </scene>
         <!--Item-->
         <scene sceneID="dZW-db-wGr">

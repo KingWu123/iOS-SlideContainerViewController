@@ -21,4 +21,9 @@
     }
 }
 
+
+- (BOOL)needShowLeftChildVCWhenGestureBegin:(CGPoint)location{
+    return YES;
+}
+
 @end

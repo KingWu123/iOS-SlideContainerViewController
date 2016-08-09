@@ -1,15 +1,13 @@
 //
-//  ViewController.h
+//  LeftViewController.h
 //  ContainerViewController
 //
-//  Created by king.wu on 7/27/16.
+//  Created by king.wu on 8/9/16.
 //  Copyright © 2016 king.wu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface LeftViewController : UIViewController
 
 @end
-

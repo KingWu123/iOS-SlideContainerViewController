@@ -7,19 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		755673EE1D49A3760074837E /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755673ED1D49A3760074837E /* UserCenterViewController.m */; };
-		755673F01D49A38C0074837E /* UserCenterViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */; };
+		755673F01D49A38C0074837E /* LeftViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755673EF1D49A38C0074837E /* LeftViewController.storyboard */; };
 		755673F31D49B3930074837E /* SlideContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755673F21D49B3930074837E /* SlideContainerViewController.m */; };
 		755674431D49DE600074837E /* UIViewController+SlideContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755674421D49DE600074837E /* UIViewController+SlideContainerViewController.m */; };
 		755C89E71D48DE93004487EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89E61D48DE93004487EA /* main.m */; };
 		755C89EA1D48DE93004487EA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89E91D48DE93004487EA /* AppDelegate.m */; };
-		755C89ED1D48DE93004487EA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89EC1D48DE93004487EA /* ViewController.m */; };
 		755C89F01D48DE93004487EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755C89EE1D48DE93004487EA /* Main.storyboard */; };
 		755C89F21D48DE93004487EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 755C89F11D48DE93004487EA /* Assets.xcassets */; };
 		755C89F51D48DE93004487EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755C89F31D48DE93004487EA /* LaunchScreen.storyboard */; };
 		755C8A001D48DE93004487EA /* ContainerViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C89FF1D48DE93004487EA /* ContainerViewControllerTests.m */; };
 		755C8A0B1D48DE93004487EA /* ContainerViewControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 755C8A0A1D48DE93004487EA /* ContainerViewControllerUITests.m */; };
-		7562E9C01D597E0200F5AAED /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7562E9BF1D597E0200F5AAED /* DetailViewController.m */; };
+		7562EA081D599BBE00F5AAED /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7562EA071D599BBE00F5AAED /* LeftViewController.m */; };
+		7562EA0B1D599BD400F5AAED /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7562EA0A1D599BD400F5AAED /* RightViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,9 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		755673EC1D49A3760074837E /* UserCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterViewController.h; sourceTree = "<group>"; };
-		755673ED1D49A3760074837E /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
-		755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserCenterViewController.storyboard; sourceTree = "<group>"; };
+		755673EF1D49A38C0074837E /* LeftViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LeftViewController.storyboard; sourceTree = "<group>"; };
 		755673F11D49B3930074837E /* SlideContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideContainerViewController.h; sourceTree = "<group>"; };
 		755673F21D49B3930074837E /* SlideContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideContainerViewController.m; sourceTree = "<group>"; };
 		755674411D49DE600074837E /* UIViewController+SlideContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SlideContainerViewController.h"; sourceTree = "<group>"; };
@@ -51,8 +48,6 @@
 		755C89E61D48DE93004487EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		755C89E81D48DE93004487EA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		755C89E91D48DE93004487EA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		755C89EB1D48DE93004487EA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		755C89EC1D48DE93004487EA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		755C89EF1D48DE93004487EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		755C89F11D48DE93004487EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		755C89F41D48DE93004487EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,8 +58,10 @@
 		755C8A061D48DE93004487EA /* ContainerViewControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContainerViewControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		755C8A0A1D48DE93004487EA /* ContainerViewControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContainerViewControllerUITests.m; sourceTree = "<group>"; };
 		755C8A0C1D48DE93004487EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7562E9BE1D597E0200F5AAED /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		7562E9BF1D597E0200F5AAED /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		7562EA061D599BBE00F5AAED /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		7562EA071D599BBE00F5AAED /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
+		7562EA091D599BD400F5AAED /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
+		7562EA0A1D599BD400F5AAED /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,14 +114,12 @@
 			children = (
 				755C89E81D48DE93004487EA /* AppDelegate.h */,
 				755C89E91D48DE93004487EA /* AppDelegate.m */,
-				755C89EB1D48DE93004487EA /* ViewController.h */,
-				755C89EC1D48DE93004487EA /* ViewController.m */,
-				7562E9BE1D597E0200F5AAED /* DetailViewController.h */,
-				7562E9BF1D597E0200F5AAED /* DetailViewController.m */,
+				7562EA091D599BD400F5AAED /* RightViewController.h */,
+				7562EA0A1D599BD400F5AAED /* RightViewController.m */,
+				7562EA061D599BBE00F5AAED /* LeftViewController.h */,
+				7562EA071D599BBE00F5AAED /* LeftViewController.m */,
+				755673EF1D49A38C0074837E /* LeftViewController.storyboard */,
 				755C89EE1D48DE93004487EA /* Main.storyboard */,
-				755673EC1D49A3760074837E /* UserCenterViewController.h */,
-				755673ED1D49A3760074837E /* UserCenterViewController.m */,
-				755673EF1D49A38C0074837E /* UserCenterViewController.storyboard */,
 				755673F11D49B3930074837E /* SlideContainerViewController.h */,
 				755673F21D49B3930074837E /* SlideContainerViewController.m */,
 				755674411D49DE600074837E /* UIViewController+SlideContainerViewController.h */,
@@ -270,7 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				755C89F51D48DE93004487EA /* LaunchScreen.storyboard in Resources */,
-				755673F01D49A38C0074837E /* UserCenterViewController.storyboard in Resources */,
+				755673F01D49A38C0074837E /* LeftViewController.storyboard in Resources */,
 				755C89F21D48DE93004487EA /* Assets.xcassets in Resources */,
 				755C89F01D48DE93004487EA /* Main.storyboard in Resources */,
 			);
@@ -297,13 +292,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				755C89ED1D48DE93004487EA /* ViewController.m in Sources */,
+				7562EA081D599BBE00F5AAED /* LeftViewController.m in Sources */,
 				755C89EA1D48DE93004487EA /* AppDelegate.m in Sources */,
-				755673EE1D49A3760074837E /* UserCenterViewController.m in Sources */,
 				755674431D49DE600074837E /* UIViewController+SlideContainerViewController.m in Sources */,
+				7562EA0B1D599BD400F5AAED /* RightViewController.m in Sources */,
 				755C89E71D48DE93004487EA /* main.m in Sources */,
 				755673F31D49B3930074837E /* SlideContainerViewController.m in Sources */,
-				7562E9C01D597E0200F5AAED /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

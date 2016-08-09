@@ -21,7 +21,7 @@
     
     UIViewController *rightVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"TabBarViewController"];
     
-    UIViewController *leftVC =  [[UIStoryboard storyboardWithName:@"UserCenterViewController" bundle:nil] instantiateViewControllerWithIdentifier:@"UserCenterViewController"];
+    UIViewController *leftVC =  [[UIStoryboard storyboardWithName:@"LeftViewController" bundle:nil] instantiateViewControllerWithIdentifier:@"LeftViewController"];
     
     SlideContainerViewController *rootVC = [[SlideContainerViewController alloc]initWithRightViewController:rightVC withLeftViewController:leftVC];
     
