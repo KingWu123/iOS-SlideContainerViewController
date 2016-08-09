@@ -1,22 +1,27 @@
 # SlideContainerViewController
-implement a containerViewController,   has  two child viewController  slide right-left, can use gesture to show each other.
+implement a containerViewController,   has  two child viewController right and left, can use gesture slide to show each other.
 
 ##Installation
-将工程里的
-SlideContainerViewController.h,
-SlideContainerViewController.m, 
-UIViewController+SlideContainerViewController.h,
-UIViewController+SlideContainerViewController.m
-这四个文件拷到自己的工程里
+copy 	
+SlideContainerViewController.h,		
+SlideContainerViewController.m, 	
+UIViewController+SlideContainerViewController.h,	
+UIViewController+SlideContainerViewController.m		
+to your project
 
 ##How to use
 UIViewController *leftVC  = ....
 
 UIViewController *rightVC = ....
 
+//default show RightVC	
 SlideContainerViewController *slideContainerVC =  [[SlideContainerViewController alloc]initWithRightViewController:rightVC withLeftViewController:leftVC];
 
-默认显示的是RightVC
+//show  reftChild VC	
+[slideContainerVC showLeftViewWithAnimated:YES];
+
+//show rightChild VC	
+[slideContainerVC showRightViewWithAnimated:YES];
 
 ##Release Notes
 ####version 1.0
@@ -26,7 +31,7 @@ SlideContainerViewController *slideContainerVC =  [[SlideContainerViewController
 不再用截图来做手势跟随的动画，而是直接用子view,
 这样调用的方式跟系统的NavigationController手势跟随是一样的，即
 
-
+![image](/Users/kingwu/Desktop/0505e002b8c475ad20bc36bc4893fdfe.jpg)
 oldVC            newVC
 手势跟随开始:
 willDisAppear    
